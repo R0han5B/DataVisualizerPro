@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DataViz Pro - Dashboard</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="dashboard-container">
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <h1>DataViz Pro</h1>
+      </div>
+      
+      <div class="user-info">
+        <span>Welcome, <%= user.name || user.email %></span>
+      </div>
+      
+      <div class="sidebar-menu">
+        <button id="newChatBtn" class="btn-primary">New Visualization</button>
+        
+        <div class="chat-list">
+          <h3>Your Visualizations</h3>
+          <ul id="chatHistory">
+            <% chats.forEach(chat => { %>
+              <li data-id="<%= chat._id %>" class="chat-item">
+                <span><%= chat.title %></span>
+                <small><%= new Date(chat.createdAt).toLocaleDateString() %></small>
+              </li>
+            <% }) %>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="sidebar-footer">
+        <button id="logoutBtn" class="btn-secondary">Logout</button>
+      </div>
+    </nav>
+    
+    <main class="content">
+      <div class="toolbar">
+        <div class="file-upload">
+          <input type="file" id="fileInput" accept=".csv,.json">
+          <button id="uploadBtn" class="btn-primary">Upload Data</button>
+        </div>
+        
+        <div class="actions">
+          <button id="generateDashboardBtn" class="btn-success">Generate Dashboard</button>
+          <button id="saveDashboardBtn" class="btn-primary">Save</button>
+        </div>
+      </div>
+      
+      <div class="data-preview">
+        <h2>Data Preview</h2>
+        <div id="dataTable" class="data-table"></div>
+      </div>
+      
+      <div class="chart-selection">
+        <h2>Available Charts</h2>
+        <div class="chart-types">
+          <% const chartTypes = [
+            'bar', 'line', 'pie', 'histogram', 'scatter', 'area', 'bubble',
+            'doughnut', 'radar', 'polarArea', 'boxplot', 'violin', 'heatmap'
+          ] %>
+          
+          <% chartTypes.forEach(type => { %>
+            <div class="chart-type" data-type="<%= type %>">
+              <img src="/img/<%= type %>.svg" alt="<%= type %> chart">
+              <span><%= type.charAt(0).toUpperCase() + type.slice(1) %></span>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+      
+      <div class="visualization-area">
+        <h2>Visualizations</h2>
+        <div id="chartContainer" class="chart-container"></div>
+      </div>
+    </main>
+    
+    <div class="chart-config-panel" id="chartConfigPanel">
+      <div class="panel-header">
+        <h3>Chart Configuration</h3>
+        <button class="close-btn">&times;</button>
+      </div>
+      
+      <div class="panel-content">
+        <div class="form-group">
+          <label for="chartTitle">Chart Title</label>
+          <input type="text" id="chartTitle" value="Chart Title">
+        </div>
+        
+        <div class="form-group">
+          <label for="xAxisSelect">X-Axis</label>
+          <select id="xAxisSelect"></select>
+        </div>
+        
+        <div class="form-group">
+          <label for="yAxisSelect">Y-Axis</label>
+          <select id="yAxisSelect"></select>
+        </div>
+        
+        <div class="form-group">
+          <label for="chartHeight">Chart Height</label>
+          <input type="range" id="chartHeight" min="200" max="800" value="400">
+          <span id="heightValue">400px</span>
+        </div>
+        
+        <div class="form-group checkbox">
+          <input type="checkbox" id="showLegend" checked>
+          <label for="showLegend">Show Legend</label>
+        </div>
+        
+        <div class="form-group checkbox">
+          <input type="checkbox" id="showGrid" checked>
+          <label for="showGrid">Show Grid</label>
+        </div>
+        
+        <button id="applyConfigBtn" class="btn-primary">Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>
